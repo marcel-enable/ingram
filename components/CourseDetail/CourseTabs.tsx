@@ -10,7 +10,13 @@ interface TabData {
   body: string | null;
 }
 
-const Tabs = ({ data, courseId }: { data: TabData[]; courseId: string }) => {
+const CourseTabs = ({
+  data,
+  courseId,
+}: {
+  data: TabData[];
+  courseId: string;
+}) => {
   const [openTab, setOpenTab] = React.useState(1);
 
   const printRef = useRef(null);
@@ -21,19 +27,37 @@ const Tabs = ({ data, courseId }: { data: TabData[]; courseId: string }) => {
       const canvas = await html2canvas(element, {
         onclone: function (clonedDoc) {
           if (clonedDoc) {
-            clonedDoc.getElementById('pdf').style.display = 'block';
+            const pdfElement = clonedDoc.getElementById('pdf');
+            if (pdfElement) {
+              pdfElement.style.display = 'block';
+            }
           }
         },
       });
-      const data = canvas.toDataURL('image/png');
+      const imgWidth = 210;
+      const pageHeight = 290;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      const doc = new jsPDF('p', 'mm');
+      let position = 0;
+      const pageData = canvas.toDataURL('image/jpeg', 1.0);
+      const imgData = encodeURIComponent(pageData);
+      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      doc.setLineWidth(5);
+      doc.setDrawColor(255, 255, 255);
+      doc.rect(0, 0, 210, 295);
+      heightLeft -= pageHeight;
 
-      const pdf = new jsPDF();
-      const imgProperties = pdf.getImageProperties(data);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
-
-      pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('document.pdf');
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        doc.addPage();
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        doc.setLineWidth(5);
+        doc.setDrawColor(255, 255, 255);
+        doc.rect(0, 0, 210, 295);
+        heightLeft -= pageHeight;
+      }
+      doc.save('file.pdf');
     }
   };
 
@@ -49,7 +73,7 @@ const Tabs = ({ data, courseId }: { data: TabData[]; courseId: string }) => {
             role="tablist"
           >
             {data.map((tab, idx) => (
-              <li key={tab.label} className=" mr-1 last:mr-0 text-center">
+              <li key={tab.label} className="mr-1 last:mr-0 text-center">
                 <a
                   className={
                     'text-sm px-2 py-3 block leading-normal border-1 border-white ' +
@@ -61,9 +85,7 @@ const Tabs = ({ data, courseId }: { data: TabData[]; courseId: string }) => {
                     e.preventDefault();
                     setOpenTab(idx + 1);
                   }}
-                  data-toggle="tab"
                   href={`link${idx + 1}`}
-                  role="tablist"
                 >
                   {tab.label}
                 </a>
@@ -72,19 +94,30 @@ const Tabs = ({ data, courseId }: { data: TabData[]; courseId: string }) => {
           </ul>
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6">
             <div className="px-4 py-5 flex-auto">
-              <div className="tab-content tab-space">
+              <div className="course-tab-content course-tab-space">
                 {data.map((tab, idx) => (
                   <div
                     key={tab.label}
                     className={openTab === idx + 1 ? 'block' : 'hidden'}
-                    id={`link${idx + 1}`}
+                    id={`course-tab-content-${idx + 1}`}
                   >
                     {tab.body ? (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: tab.body,
-                        }}
-                      />
+                      <>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: tab.body,
+                          }}
+                        />
+                        <div className="flex justify-start px-0 py-4">
+                          <button
+                            className="py-2 px-5 bg-accent border-accent text-accent-contrast"
+                            type="button"
+                            onClick={handleDownloadPdf}
+                          >
+                            Download as PDF
+                          </button>
+                        </div>
+                      </>
                     ) : (
                       <ClassSchedule courseId={courseId} />
                     )}
@@ -93,15 +126,7 @@ const Tabs = ({ data, courseId }: { data: TabData[]; courseId: string }) => {
               </div>
             </div>
           </div>
-          <div className="flex justify-start px-4">
-            <button
-              className="py-2 px-5 bg-accent border-accent text-accent-contrast"
-              type="button"
-              onClick={handleDownloadPdf}
-            >
-              Download as PDF
-            </button>
-          </div>
+
           <div id="pdf" className="hidden mb-4 pb-4" ref={printRef}>
             <div className="flex items-center justify-end">
               <img src={ingramLogo} className="h-11" />
@@ -116,14 +141,6 @@ const Tabs = ({ data, courseId }: { data: TabData[]; courseId: string }) => {
                   className="py-4"
                 />
               )}
-              {data[2].body && (
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: data[2].body,
-                  }}
-                  className="py-4"
-                />
-              )}
             </div>
           </div>
         </div>
@@ -132,4 +149,4 @@ const Tabs = ({ data, courseId }: { data: TabData[]; courseId: string }) => {
   );
 };
 
-export default Tabs;
+export default CourseTabs;

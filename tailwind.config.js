@@ -9,7 +9,9 @@ function getInstanceSetting(settingName, defaultSetting) {
     let instance = instances[0];
 
     if (INSTANCE_NAME) {
-      const possibleMatch = instances.find(instance => instance.nickname === INSTANCE_NAME);
+      const possibleMatch = instances.find(
+        (instance) => instance.nickname === INSTANCE_NAME
+      );
       if (possibleMatch && possibleMatch.apiKey) {
         instance = possibleMatch;
       }
@@ -26,7 +28,7 @@ module.exports = {
     './atoms/**/*.{js,jsx,ts,tsx}',
     './pages/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
-    './dist/**/*.{js,jsx,ts,tsx}'
+    './dist/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     screens: {
@@ -35,12 +37,12 @@ module.exports = {
       lg: '1024px',
       xl: '1440px',
       '2xl': '1920px',
-      '3xl': '2560px'
+      '3xl': '2560px',
     },
     boxShadow: {
       DEFAULT: '0px 0px 5px #4d90fe',
       lg: '0px 0px 12px -2px rgba(0, 0, 0, 0.25)',
-      none: 'none'
+      none: 'none',
     },
     fontSize: {
       xs: '0.625rem',
@@ -53,33 +55,39 @@ module.exports = {
       '4xl': '2.25rem',
       '5xl': '3rem',
       '6xl': '4rem',
-      '7xl': '5rem'
+      '7xl': '5rem',
     },
     extend: {
       colors: {
-        accent: getInstanceSetting('accentColor', '#111111'),
-        secondary: getInstanceSetting('secondaryColor', '#111111'),
-        link: getInstanceSetting('linkColor', '#a9a9a9'),
-        'accent-highlight': '#111111',
-        'accent-highlight-background': '#dddddd',
+        primary: getInstanceSetting('primaryColor', '#656565'),
+        accent: getInstanceSetting('accentColor', '#2376bc'),
+        secondary: getInstanceSetting('secondaryColor', '#000000'),
+        tertiary: getInstanceSetting('tertiaryColor', '#efefef'),
+        link: getInstanceSetting('linkColor', '#2376bc'),
+        'accent-highlight': '#174e7c',
+        'accent-highlight-background': '#e4f0fa',
         'accent-tinted': {
-          70: '#b8b8b8',
-          80: '#cfcfcf',
-          90: '#e7e7e7'
+          70: '#bdd6eb',
+          80: '#d3e4f2',
+          90: '#e9f1f8',
         },
+        'primary-hover': '#4c4c4c',
         'accent-contrast': '#ffffff',
         'accent-contrast-tinted-background': '#b3b3b3',
-        'accent-hover': '#2b2b2b',
-        'secondary-hover': '#2b2b2b',
+        'accent-hover': '#3890da',
+        'secondary-hover': '#1a1a1a',
         'secondary-contrast': '#ffffff',
-        'link-hover': '#767676'
+        'secondary-background': '#f6f6f6',
+        'secondary-border': 'e9e9e9',
+        'link-hover': '#236c96',
       },
       fontFamily: {
         primary: [getInstanceSetting('font', 'Inter'), 'Nunito', 'sans-serif'],
-        header: [getInstanceSetting('font', 'Roboto Condensed'), 'Nunito', 'sans-serif'],
-        secondary: [getInstanceSetting('altFont', 'Roboto Condensed'), 'sans-serif']
-      }
-    }
+        header: [getInstanceSetting('font', 'Roboto'), 'Nunito', 'sans-serif'],
+        secondary: [getInstanceSetting('altFont', 'Roboto'), 'sans-serif'],
+        robotocondensed: [getInstanceSetting('font', 'Roboto'), 'sans-serif'],
+      },
+    },
   },
-  plugins: [require('@tailwindcss/line-clamp')]
+  plugins: [require('@tailwindcss/line-clamp')],
 };

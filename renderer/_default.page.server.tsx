@@ -38,6 +38,7 @@ const render: RenderFn = async (pageContext) => {
     appearance,
     currentUser,
     queryParams,
+    routeParams,
   } = pageContext;
 
   // See https://vite-plugin-ssr.com/html-head
@@ -60,6 +61,7 @@ const render: RenderFn = async (pageContext) => {
             appearance={appearance}
             currentUser={currentUser}
             queryParams={queryParams}
+            routeParams={routeParams}
           />
         </PageWrapper>
       </I18nextProvider>

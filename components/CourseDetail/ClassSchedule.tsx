@@ -108,7 +108,7 @@ const ClassSchedule = ({ courseId }: { courseId: string }) => {
   const { data, loading, error } = useQuery(query, {
     variables: { id: courseId },
   });
-  console.log('data', data);
+
   useEffect(() => {
     if (data) {
       setMeetings(formatMeetings(data.CourseById.meetings));

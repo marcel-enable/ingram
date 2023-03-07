@@ -13,7 +13,7 @@ const Header = () => {
             </a>
           </div>
         </div>
-        <div className="flex items-center">{/* <CartButton /> */}</div>
+        {/* <div className="flex items-center"><CartButton /></div> */}
       </div>
     </div>
   );
