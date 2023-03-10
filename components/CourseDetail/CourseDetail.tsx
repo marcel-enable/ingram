@@ -68,18 +68,13 @@ const CourseDetail = () => {
       (item: ContenItem) =>
         item.title.toLowerCase() === routeParams.courseSlug.split('-').join(' ')
     )[0].displayCourse;
-    // Hardcoded course ID
-    // const courseId = 'f510f1b5-70af-4312-a9e6-7a2f50a1cd2f';
-    // ingram new instance test-ilt id: f510f1b5-70af-4312-a9e6-7a2f50a1cd2f
-    // ingram old instance test-ilt id: 9479f7c8-9399-48fe-8f5e-8d47297dd78d
+
     if (courseId) {
       const {
         data: courseData,
         loading: courseLoading,
         error: courseError,
-      } = useQuery(CourseQuery, {
-        variables: { id: courseId },
-      });
+      } = useQuery(CourseQuery, { variables: { id: courseId } });
       if (courseData) {
         useEffect(() => {
           setTitle(courseData.CourseById.title);

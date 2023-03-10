@@ -38,10 +38,10 @@ const CourseTabs = ({
       const pageHeight = 290;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
-      const doc = new jsPDF('p', 'mm');
-      let position = 0;
       const pageData = canvas.toDataURL('image/jpeg', 1.0);
       const imgData = encodeURIComponent(pageData);
+      const doc = new jsPDF('p', 'mm');
+      let position = 0;
       doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
       doc.setLineWidth(5);
       doc.setDrawColor(255, 255, 255);
@@ -103,11 +103,7 @@ const CourseTabs = ({
                   >
                     {tab.body ? (
                       <>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: tab.body,
-                          }}
-                        />
+                        <div dangerouslySetInnerHTML={{ __html: tab.body }} />
                         <div className="flex justify-start px-0 py-4">
                           <button
                             className="py-2 px-5 bg-accent border-accent text-accent-contrast"
