@@ -5,7 +5,6 @@ import { usePageContext } from '../../renderer/usePageContext';
 import awsLogo from '../../renderer/AWSLogo.png';
 import CourseTabs from './CourseTabs';
 import Header from './Header';
-import currencyData from '../../utilities/currency.json';
 
 interface ContenItem {
   displayCourse: string;
@@ -20,14 +19,7 @@ const CourseDetail = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [courseId, setCourseId] = useState('');
-  const [currencyCode, setCurrencyCode] = useState(
-    currentUser?.ref1 ? currentUser.ref1 : 'USD'
-  );
-  const [currencySymbol, setCurrencySymbol] = useState(
-    currencyData[currencyCode as keyof typeof currencyData]
-      ? currencyData[currencyCode as keyof typeof currencyData]['symbol']
-      : '$'
-  );
+  const [currencyCode, setCurrencyCode] = useState('USD');
 
   const [tabs, setTabs] = useState([]);
 
@@ -46,6 +38,7 @@ const CourseDetail = () => {
     query CourseById($id: ID!) {
       CourseById(id: $id) {
         title
+        customFields
         courseGroup {
           description
           tabs {
@@ -88,6 +81,9 @@ const CourseDetail = () => {
             )
           );
           setCourseId(courseId);
+          if (courseData.CourseById.customFields.currency[0]) {
+            setCurrencyCode(courseData.CourseById.customFields.currency[0]);
+          }
         }, []);
       } else if (courseError) {
         console.log('Error', courseError);
@@ -123,7 +119,7 @@ const CourseDetail = () => {
         <div className="grid grid-cols-3 gap-10 py-4 px-4">
           <div className="col-span-3 md:col-span-2">
             {tabs.length > 0 && courseId && (
-              <CourseTabs data={tabs} courseId={courseId} />
+              <CourseTabs data={tabs} courseId={courseId} currencyCode={currencyCode} />
             )}
           </div>
           <div className="col-span-3 md:col-span-1 mt-14">

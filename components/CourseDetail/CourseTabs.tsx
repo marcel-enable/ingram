@@ -13,9 +13,11 @@ interface TabData {
 const CourseTabs = ({
   data,
   courseId,
+  currencyCode
 }: {
   data: TabData[];
   courseId: string;
+  currencyCode: string;
 }) => {
   const [openTab, setOpenTab] = React.useState(1);
 
@@ -115,7 +117,7 @@ const CourseTabs = ({
                         </div>
                       </>
                     ) : (
-                      <ClassSchedule courseId={courseId} />
+                      <ClassSchedule courseId={courseId} currencyCode={currencyCode}/>
                     )}
                   </div>
                 ))}
@@ -127,7 +129,7 @@ const CourseTabs = ({
             <div className="flex items-center justify-end">
               <img src={ingramLogo} className="h-11" />
             </div>
-            <ClassSchedule courseId={courseId} />
+            <ClassSchedule courseId={courseId} currencyCode={currencyCode}/>
             <div className="px-4">
               {data[1].body && (
                 <div

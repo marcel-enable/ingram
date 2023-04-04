@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
 import { AddToCartButton, EcommItemType } from '@thoughtindustries/cart';
-import { usePageContext } from '../../renderer/usePageContext';
 import currencyData from '../../utilities/currency.json';
 
 const headers = [
@@ -67,15 +66,10 @@ const formatMeetings = (meetings: Meeting[]) => {
   });
 };
 
-const ClassSchedule = ({ courseId }: { courseId: string }) => {
-  const pageContext = usePageContext();
-  const { currentUser } = pageContext;
+const ClassSchedule = ({ courseId, currencyCode }: { courseId: string, currencyCode:string }) => {
   const [meetings, setMeetings] = useState<FormattedMeetings[]>([]);
   const [price, setPrice] = useState(0);
   const [type, setType] = useState('');
-  const [currencyCode, setCurrencyCode] = useState(
-    currentUser?.ref1 ? currentUser.ref1 : 'USD'
-  );
   const [currencySymbol, setCurrencySymbol] = useState(
     currencyData[currencyCode as keyof typeof currencyData]
       ? currencyData[currencyCode as keyof typeof currencyData]['symbol']
