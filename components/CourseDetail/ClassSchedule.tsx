@@ -87,6 +87,7 @@ const ClassSchedule = ({
     const [meetings, setMeetings] = useState<FormattedMeetings[]>([]);
     const [price, setPrice] = useState(0);
     const [type, setType] = useState('');
+    const [courseTitle, setCourseTitle] = useState('');
     const [currencySymbol, setCurrencySymbol] = useState(
         currencyData[currencyCode as keyof typeof currencyData]
             ? currencyData[currencyCode as keyof typeof currencyData]['symbol']
@@ -99,6 +100,7 @@ const ClassSchedule = ({
                 id
                 kind
                 courses {
+                    title
                     id
                     priceInCents
                     meetings {
@@ -125,6 +127,7 @@ const ClassSchedule = ({
             setMeetings(
                 formatMeetings(data.CourseGroupBySlug?.courses[0]?.meetings)
             );
+            setCourseTitle(data.CourseGroupBySlug?.courses[0]?.title)
             setPrice(
                 formatPrice(data.CourseGroupBySlug?.courses[0]?.priceInCents)
             );
@@ -205,7 +208,7 @@ const ClassSchedule = ({
                                                         purchasable={{
                                                             id: courseId,
                                                             priceInCents: price,
-                                                            name: title,
+                                                            name: courseTitle,
                                                         }}
                                                     >
                                                         Add to Cart
